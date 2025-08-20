@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request
 import google.generativeai as genai
 import re
+import os
 
-# configure API
-genai.configure(api_key="AIzaSyCAyJGft7lbkyLZ4GIlP9RX5QjHQz8dD-U")  # replace with your real key
+# configure API with environment variable
+genai.configure(api_key=os.environ["AIzaSyCAyJGft7lbkyLZ4GIlP9RX5QjHQz8dD-U"])
 
 app = Flask(__name__)
 
