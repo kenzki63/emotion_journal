@@ -1,10 +1,10 @@
+import os
 from flask import Flask, render_template, request
 import google.generativeai as genai
 import re
-import os
 
 # configure API with environment variable
-genai.configure(api_key=os.environ["AIzaSyCAyJGft7lbkyLZ4GIlP9RX5QjHQz8dD-U"])
+genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 
 app = Flask(__name__)
 
