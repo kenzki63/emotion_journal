@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emotion-Aware Journal</title>
+  <link rel="icon" href="">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #fdfcf7;
+      font-family: "Georgia", serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .journal {
+      background: #fff url('https://www.transparenttextures.com/patterns/lined-paper.png');
+      background-size: cover;
+      max-width: 700px;
+      width: 100%;
+      min-height: 80vh;
+      padding: 40px 30px 40px 100px;
+      border: 2px solid #d4b483;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .journal::before {
+      content: "";
+      position: absolute;
+      left: 50px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #d86c6c;
+    }
+
+    h1 {
+      font-family: "Brush Script MT", cursive;
+      font-size: 42px;
+      color: #4a2c2a;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: #444;
+      margin-bottom: 15px;
+      text-align: center;
+      font-style: italic;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 180px;
+      padding: 15px;
+      border: none;
+      background: transparent;
+      font-size: 18px;
+      line-height: 1.8;
+      resize: none;
+      outline: none;
+      font-family: "Georgia", serif;
+    }
+
+    textarea::placeholder {
+      color: #aaa;
+      font-style: italic;
+    }
+
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 12px 25px;
+      font-size: 16px;
+      font-weight: bold;
+      font-family: "Georgia", serif;
+      color: #fff;
+      background: #6d4c41;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #5d4037;
+    }
+
+    .result {
+      margin-top: 25px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.8);
+      border-left: 5px solid #6d4c41;
+      font-size: 17px;
+      line-height: 1.6;
+      font-family: "Georgia", serif;
+    }
+
+    .result h3 {
+      font-family: "Brush Script MT", cursive;
+      font-size: 26px;
+      margin-bottom: 10px;
+      color: #4a2c2a;
+    }
+
+    .result p {
+      text-align: left;
+      font-style: normal;
+      color: #333;
+    }
+
+    /* Floating objects */
+    .float {
+      position: absolute;
+      width: 120px;
+      opacity: 0.95;
+      animation: float 6s ease-in-out infinite;
+      z-index: 1;
+      transition: transform 0.3s ease, scale 0.3s ease;
+      cursor: pointer;
+    }
+
+    .pencil { 
+      top: 8%; 
+      left: 5%; 
+      width: 180px; 
+      animation-delay: 0s; 
+    }
+    
+    .eraser { 
+      bottom: 5%; 
+      right: 8%; 
+      width: 120px; 
+      animation-delay: 2s; 
+    }
+    
+    .clip { 
+      top: 40%; 
+      left: 85%; 
+      width: 95px; 
+      animation-delay: 4s; 
+    }
+
+    .pencil:hover {
+      transform: scale(1.3) rotate(10deg);
+      width: 234px;
+      animation-play-state: paused;
+      filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+    }
+
+    .eraser:hover {
+      transform: scale(1.3) rotate(10deg);
+      width: 156px;
+      animation-play-state: paused;
+      filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+    }
+
+    .clip:hover {
+      transform: scale(1.3) rotate(10deg);
+      width: 123.5px;
+      animation-play-state: paused;
+      filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-25px) rotate(15deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+
+    /* Tablet Styles */
+    @media screen and (max-width: 768px) {
+      body {
+        padding: 15px;
+        align-items: flex-start;
+        padding-top: 30px;
+      }
+
+      .journal {
+        padding: 30px 25px 30px 70px;
+        min-height: 70vh;
+        max-width: 100%;
+      }
+
+      .journal::before {
+        left: 35px;
+      }
+
+      h1 {
+        font-size: 36px;
+        margin-bottom: 15px;
+      }
+
+      .subtitle {
+        font-size: 15px;
+      }
+
+      textarea {
+        min-height: 150px;
+        font-size: 16px;
+        padding: 12px;
+      }
+
+      .result {
+        padding: 12px;
+        font-size: 16px;
+      }
+
+      .result h3 {
+        font-size: 24px;
+      }
+
+      /* Adjust floating objects for tablet */
+      .pencil { 
+        width: 140px;
+        left: 3%;
+        top: 5%;
+      }
+      
+      .eraser { 
+        width: 100px;
+        right: 5%;
+        bottom: 3%;
+      }
+      
+      .clip { 
+        width: 80px;
+        left: 88%;
+        top: 35%;
+      }
+    }
+
+    /* Mobile Styles */
+    @media screen and (max-width: 480px) {
+      body {
+        padding: 10px;
+        padding-top: 20px;
+      }
+
+      .journal {
+        padding: 25px 20px 25px 50px;
+        min-height: 75vh;
+        border-radius: 8px;
+      }
+
+      .journal::before {
+        left: 25px;
+        width: 1.5px;
+      }
+
+      h1 {
+        font-size: 28px;
+        margin-bottom: 12px;
+        line-height: 1.2;
+      }
+
+      .subtitle {
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+
+      textarea {
+        min-height: 120px;
+        font-size: 16px;
+        line-height: 1.6;
+        padding: 10px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 15px;
+        margin: 15px auto;
+      }
+
+      .result {
+        margin-top: 20px;
+        padding: 10px;
+        font-size: 15px;
+        border-left-width: 3px;
+      }
+
+      .result h3 {
+        font-size: 20px;
+        margin-bottom: 8px;
+      }
+
+      /* Hide floating objects on mobile or make them smaller and repositioned */
+      .float {
+        display: none;
+      }
+    }
+
+    /* Very small mobile screens */
+    @media screen and (max-width: 320px) {
+      .journal {
+        padding: 20px 15px 20px 40px;
+      }
+
+      .journal::before {
+        left: 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      textarea {
+        font-size: 15px;
+        min-height: 100px;
+      }
+
+      button {
+        padding: 8px 16px;
+        font-size: 14px;
+      }
+    }
+
+    /* Landscape mobile orientation */
+    @media screen and (max-height: 500px) and (orientation: landscape) {
+      body {
+        align-items: flex-start;
+        padding-top: 10px;
+      }
+
+      .journal {
+        min-height: 90vh;
+      }
+
+      textarea {
+        min-height: 80px;
+      }
+    }
+
+    /* High DPI displays */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      .journal {
+        border-width: 1px;
+      }
+      
+      .journal::before {
+        width: 1px;
+      }
+    }
+
+    /* Accessibility improvements */
+    @media (prefers-reduced-motion: reduce) {
+      .float {
+        animation: none;
+      }
+      
+      .float:hover {
+        transform: scale(1.1);
+      }
+      
+      button {
+        transition: none;
+      }
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #2a2520;
+      }
+      
+      .journal {
+        background: #3a3530 url('https://www.transparenttextures.com/patterns/lined-paper.png');
+        border-color: #8b7355;
+        color: #e0e0e0;
+      }
+      
+      h1 {
+        color: #d4b483;
+      }
+      
+      .subtitle {
+        color: #bbb;
+      }
+      
+      textarea {
+        color: #e0e0e0;
+      }
+      
+      textarea::placeholder {
+        color: #888;
+      }
+      
+      .result {
+        background: rgba(60, 55, 50, 0.8);
+        color: #e0e0e0;
+      }
+      
+      .result h3 {
+        color: #d4b483;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating objects around the journal -->
+  <div class="float pencil" style="background: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 20%22><rect fill=%22%23f4d03f%22 width=%2280%22 height=%2215%22 rx=%222%22/><rect fill=%22%23e67e22%22 x=%2275%22 width=%2220%22 height=%2215%22 rx=%222%22/><circle fill=%22%232c3e50%22 cx=%2285%22 cy=%227.5%22 r=%222%22/></svg>') center/contain no-repeat; width: 180px; height: 20px;"></div>
+  
+  <div class="float eraser" style="background: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 20%22><rect fill=%22%23e74c3c%22 width=%2235%22 height=%2218%22 rx=%223%22/><rect fill=%22%23c0392b%22 x=%2230%22 width=%2210%22 height=%2218%22 rx=%223%22/></svg>') center/contain no-repeat; width: 120px; height: 20px;"></div>
+  
+  <div class="float clip" style="background: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 40%22><path fill=%22%2334495e%22 d=%22M5,0 L15,0 L15,35 L10,30 L5,35 Z%22/></svg>') center/contain no-repeat; width: 95px; height: 40px;"></div>
+
+  <div class="journal">
+    <h1>📔Emotion Aware Daily Journal</h1>
+    <p class="subtitle">How was your day…</p>
+
+    <form method="POST" onsubmit="handleSubmit(event)">
+      <textarea name="entry" id="journalEntry" placeholder="Dear Diary..." required></textarea>
+      <button type="submit">Analyze ✨</button>
+    </form>
+
+    <div class="result" id="analysisResult" style="display: none;">
+        <h3>🔎 Analysis:</h3>
+        <p id="analysisText"></p>
+    </div>
+  </div>
+
+  <script>
+    function handleSubmit(event) {
+      event.preventDefault();
+      
+      const entry = document.getElementById('journalEntry').value;
+      const resultDiv = document.getElementById('analysisResult');
+      const analysisText = document.getElementById('analysisText');
+      
+      // Simple mock analysis - replace with actual backend call
+      const mockAnalyses = [
+        "Your entry shows a mix of gratitude and reflection. There's a sense of contentment with some underlying anticipation for what's to come.",
+        "I detect feelings of accomplishment and satisfaction in your writing. You seem to be processing the day's events positively.",
+        "Your words convey a contemplative mood with hints of optimism. There's evidence of emotional growth and self-awareness.",
+        "The tone suggests resilience and adaptability. You're navigating challenges while maintaining a hopeful perspective."
+      ];
+      
+      const randomAnalysis = mockAnalyses[Math.floor(Math.random() * mockAnalyses.length)];
+      
+      analysisText.textContent = randomAnalysis;
+      resultDiv.style.display = 'block';
+      
+      // Scroll to results on mobile
+      if (window.innerWidth <= 768) {
+        setTimeout(() => {
+          resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+      }
+    }
+
+    // Add some interactivity to floating objects
+    document.querySelectorAll('.float').forEach(obj => {
+      obj.addEventListener('click', () => {
+        obj.style.animationDuration = '2s';
+        setTimeout(() => {
+          obj.style.animationDuration = '6s';
+        }, 4000);
+      });
+    });
+  </script>
+</body>
+</html>
