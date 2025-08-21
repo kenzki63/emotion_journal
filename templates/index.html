@@ -439,11 +439,13 @@
       <textarea name="entry" id="journalEntry" placeholder="Dear Diary..." required></textarea>
       <button type="submit">Analyze ✨</button>
     </form>
-
+    
+    {% if analysis %}
     <div class="result" id="analysisResult" style="display: none;">
         <h3>🔎 Analysis:</h3>
-        <p id="analysisText"></p>
+        <p id="analysisText">{{ analysis|safe }}</p>
     </div>
+    {% endif %}
   </div>
 
   <script>
