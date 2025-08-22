@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request
 import google.generativeai as genai
 import re
 import os
@@ -54,6 +54,7 @@ def analyze_journal_entry(entry: str):
 # Routes
 @app.route("/", methods=["GET", "POST"])
 def home():
+    analysis = None
     if request.method == "POST":
         entry = request.form["entry"]
         analysis = analyze_journal_entry(entry)
@@ -63,11 +64,9 @@ def home():
         db.session.add(new_entry)
         db.session.commit()
 
-        return redirect(url_for("home"))
-
     # Show all saved entries (latest first)
     entries = JournalEntry.query.order_by(JournalEntry.timestamp.desc()).all()
-    return render_template("index.html", entries=entries)
+    return render_template("index.html", analysis=analysis, entries=entries)
 
 # Create tables on first run
 with app.app_context():
