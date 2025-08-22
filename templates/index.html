@@ -156,6 +156,7 @@
       filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
     }
 
+    /* Past Entries */
     .entries {
       margin-top: 30px;
       padding: 15px;
@@ -175,11 +176,10 @@
       margin-bottom: 15px;
       padding-bottom: 10px;
       border-bottom: 1px dashed #bbb;
+      cursor: pointer;
     }
 
-    .entry-item:last-child {
-      border-bottom: none;
-    }
+    .entry-item:last-child { border-bottom: none; }
 
     .entry-date {
       font-size: 13px;
@@ -188,11 +188,43 @@
       display: block;
     }
 
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+    }
+
     .entry-text {
       font-size: 16px;
       color: #333;
       font-style: italic;
     }
+
+  .arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+
+  .arrow.rotated { transform: rotate(180deg); }
+
+  .entry-analysis {
+    max-height: 0;
+    overflow: hidden;
+    margin-top: 6px;
+    padding: 0 8px;
+    border-left: 3px solid #6d4c41;
+    background: rgba(250, 240, 220, 0.6);
+    border-radius: 4px;
+    font-size: 0.95rem;
+    transition: max-height 0.4s ease, padding 0.3s ease;
+  }
+
+  .entry-analysis.open {
+    max-height: 500px;
+    padding: 8px;
+  }
+
 
     /* Interactive Headings */
   h1:hover, h3:hover {
@@ -495,13 +527,34 @@
     <div class="entries">
         <h3>📚 Your Past Entries</h3>
         {% for e in entries %}
-          <div class="entry-item">
-            <span class="entry-date">{{ e.date }}</span>
-            <div class="entry-text">{{ e.text }}</div>
+          <div class="entry-item" onclick="toggleAnalysis({{ e.id }})">
+            <span class="entry-date">{{ e.timestamp.strftime('%B %d, %Y %I:%M %p') }}</span>
+            <div class="entry-header">
+              <div class="entry-text">{{ e.text }}</div>
+              <span class="arrow" id="arrow-{{ e.id }}">▼</span>
+            </div>
+            <div class="entry-analysis" id="analysis-{{ e.id }}">
+              {{ e.analysis | safe }}
+            </div>
           </div>
         {% endfor %}
     </div>
     {% endif %}
   </div>
+
+  <script>
+    function toggleAnalysis(id) {
+      const content = document.getElementById("analysis-" + id);
+      const arrow = document.getElementById("arrow-" + id);
+
+      if (content.classList.contains("open")) {
+        content.classList.remove("open");
+        arrow.classList.remove("rotated");
+      } else {
+        content.classList.add("open");
+        arrow.classList.add("rotated");
+      }
+    }
+  </script>
 </body>
 </html>
