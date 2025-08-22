@@ -193,6 +193,41 @@
       color: #333;
       font-style: italic;
     }
+
+    /* Interactive Headings */
+  h1:hover, h3:hover {
+    color: #6d4c41; /* warm brown highlight */
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.25);
+    transform: translateY(-2px);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+/* Interactive Journal Prompt */
+  p:hover {
+    color: #6d4c41;
+    font-style: normal;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+  }
+
+/* Past entries hover */
+  .entry-item:hover {
+    background: rgba(250, 240, 220, 0.5);
+    border-radius: 6px;
+    padding: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+
+  /* Entry text hover effect */
+  .entry-text:hover {
+    color: #4a2c2a;
+    font-style: italic;
+    transform: scale(1.01);
+    transition: all 0.2s ease;
+  }
+
     
     /* Floating animation */
     @keyframes float {
