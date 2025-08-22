@@ -156,6 +156,44 @@
       filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
     }
 
+    .entries {
+      margin-top: 30px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid #d4b483;
+      border-radius: 8px;
+    }
+
+    .entries h3 {
+      font-family: "Brush Script MT", cursive;
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #4a2c2a;
+    }
+
+    .entry-item {
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed #bbb;
+    }
+
+    .entry-item:last-child {
+      border-bottom: none;
+    }
+
+    .entry-date {
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .entry-text {
+      font-size: 16px;
+      color: #333;
+      font-style: italic;
+    }
+    
     /* Floating animation */
     @keyframes float {
       0% { transform: translateY(0px) rotate(0deg); }
@@ -397,13 +435,13 @@
   </style>
 </head>
 <body>
-  <!-- Floating objects around the journal -->
+<!-- Floating objects around the journal -->
   <img src="{{ url_for('static', filename='images/pencil-removebg-preview.png') }}" class="float pencil">
   <img src="{{ url_for('static', filename='images/eraser-removebg-preview.png') }}" class="float eraser">
   <img src="{{ url_for('static', filename='images/paperclip-removebg-preview.png') }}" class="float clip">
 
   <div class="journal">
-    <h1>📔Emotion Aware Daily Journal</h1>
+    <h1>📔 Emotion Aware Daily Journal</h1>
     <p>How was your day…</p>
 
     <form method="POST">
@@ -415,6 +453,18 @@
     <div class="result">
         <h3>🔎 Analysis:</h3>
         <p>{{ analysis|safe }}</p>
+    </div>
+    {% endif %}
+
+    {% if entries %}
+    <div class="entries">
+        <h3>📚 Your Past Entries</h3>
+        {% for e in entries %}
+          <div class="entry-item">
+            <span class="entry-date">{{ e.date }}</span>
+            <div class="entry-text">{{ e.text }}</div>
+          </div>
+        {% endfor %}
     </div>
     {% endif %}
   </div>
