@@ -530,46 +530,73 @@
     }
 
     /* Dark mode support */
-    @media (prefers-color-scheme: dark) {
-      body {
-        background: #2a2520;
-      }
-      
-      .journal {
-        background: #3a3530 url('https://www.transparenttextures.com/patterns/lined-paper.png');
-        border-color: #8b7355;
-        color: #e0e0e0;
-      }
-      
-      h1 {
-        color: #d4b483;
-      }
-      
-      p {
-        color: #bbb;
-      }
-      
-      textarea {
-        color: #e0e0e0;
-      }
-      
-      textarea::placeholder {
-        color: #888;
-      }
-      
-      .result {
-        background: rgba(60, 55, 50, 0.8);
-        color: #e0e0e0;
-      }
-      
-      .result h3 {
-        color: #d4b483;
-      }
-      
-      .result p {
-        color: #e0e0e0;
-      }
-    }
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #2a2520;
+    transition: background 0.5s ease-in-out;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .journal {
+    background: #3a3530 url('https://www.transparenttextures.com/patterns/lined-paper.png');
+    border-color: #8b7355;
+    color: #e0e0e0;
+  }
+  
+  h1 {
+    color: #d4b483;
+  }
+  
+  p {
+    color: #bbb;
+  }
+  
+  textarea {
+    color: #e0e0e0;
+  }
+  
+  textarea::placeholder {
+    color: #888;
+  }
+  
+  .result {
+    background: rgba(60, 55, 50, 0.8);
+    color: #e0e0e0;
+  }
+  
+  .result h3 {
+    color: #d4b483;
+  }
+  
+  .result p {
+    color: #e0e0e0;
+  }
+
+  /* 🌌 Background glow animation for dark mode */
+  body::before {
+    content: "";
+    position: fixed;
+    top: var(--y, 50%);
+    left: var(--x, 50%);
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(212, 180, 131, 0.4) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    pointer-events: none;
+    transition: width 0.5s ease, height 0.5s ease, opacity 0.8s ease;
+    z-index: 0;
+    opacity: 0;
+  }
+
+  body:hover::before {
+    width: 300px;
+    height: 300px;
+    opacity: 1;
+  }
+}
+
 
   </style>
 </head>
