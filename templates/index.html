@@ -216,16 +216,16 @@
   .arrow.rotated { transform: rotate(180deg); }
 
   .entry-analysis {
-    display: none;
-    margin-top: 12px;
-     padding: 12px;
-    border-left: 3px solid #4cafef;
-    background: #fdfdfd; /* almost white, very clean */
-    border-radius: 6px;
-    font-size: 15px;
-    color: #333; /* clear dark gray text */
-    line-height: 1.6;
-  }
+      max-height: 0;
+      overflow: hidden;
+      margin-top: 6px;
+      padding: 0 8px;
+      border-left: 3px solid #6d4c41;
+      background: rgba(250, 240, 220, 0.6);
+      border-radius: 4px;
+      font-size: 0.95rem;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+    }
 
   .entry-analysis p {
     margin-bottom: 8px;
