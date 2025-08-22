@@ -52,7 +52,7 @@
       margin-bottom: 20px;
     }
 
-    .subtitle {
+    p {
       font-size: 16px;
       color: #444;
       margin-bottom: 15px;
@@ -116,9 +116,9 @@
     }
 
     .result p {
-      text-align: left;
-      font-style: normal;
-      color: #333;
+     text-align: left;
+     font-style: normal;
+     color: #333;
     }
 
     /* Floating objects */
@@ -132,26 +132,10 @@
       cursor: pointer;
     }
 
-    .pencil { 
-      top: 8%; 
-      left: 5%; 
-      width: 180px; 
-      animation-delay: 0s; 
-    }
-    
-    .eraser { 
-      bottom: 5%; 
-      right: 8%; 
-      width: 120px; 
-      animation-delay: 2s; 
-    }
-    
-    .clip { 
-      top: 40%; 
-      left: 85%; 
-      width: 95px; 
-      animation-delay: 4s; 
-    }
+    /* Individual sizes/positions */
+    .pencil { top: 8%; left: 5%; width: 180px; animation-delay: 0s; }
+    .eraser { bottom: 5%; right: 8%; width: 120px; animation-delay: 2s; }
+    .clip   { top: 40%; left: 85%; width: 95px; animation-delay: 4s; }
 
     .pencil:hover {
       transform: scale(1.3) rotate(10deg);
@@ -159,14 +143,12 @@
       animation-play-state: paused;
       filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
     }
-
     .eraser:hover {
       transform: scale(1.3) rotate(10deg);
       width: 156px;
       animation-play-state: paused;
       filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
     }
-
     .clip:hover {
       transform: scale(1.3) rotate(10deg);
       width: 123.5px;
@@ -174,6 +156,7 @@
       filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
     }
 
+    /* Floating animation */
     @keyframes float {
       0% { transform: translateY(0px) rotate(0deg); }
       50% { transform: translateY(-25px) rotate(15deg); }
@@ -203,7 +186,7 @@
         margin-bottom: 15px;
       }
 
-      .subtitle {
+      p {
         font-size: 15px;
       }
 
@@ -266,7 +249,7 @@
         line-height: 1.2;
       }
 
-      .subtitle {
+      p {
         font-size: 14px;
         margin-bottom: 12px;
       }
@@ -296,20 +279,9 @@
         margin-bottom: 8px;
       }
 
-      .pencil {
-        width: 120px;
-      }
-      
-      .clip {
-        width: 70px;
-        left: 75%;
-        top: 30%;
-      }
-      
-      /* Hide floating objects on mobile or make them smaller and repositioned */
+      /* Hide floating objects on mobile */
       .float {
-        display: absolute;
-        z-index: 1;
+        display: none;
       }
     }
 
@@ -396,7 +368,7 @@
         color: #d4b483;
       }
       
-      .subtitle {
+      p {
         color: #bbb;
       }
       
@@ -416,74 +388,35 @@
       .result h3 {
         color: #d4b483;
       }
-
+      
       .result p {
-        color: #ccc;
+        color: #e0e0e0;
       }
     }
+
   </style>
 </head>
 <body>
   <!-- Floating objects around the journal -->
-  <div class="float pencil" style="background: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 20%22><rect fill=%22%23f4d03f%22 width=%2280%22 height=%2215%22 rx=%222%22/><rect fill=%22%23e67e22%22 x=%2275%22 width=%2220%22 height=%2215%22 rx=%222%22/><circle fill=%22%232c3e50%22 cx=%2285%22 cy=%227.5%22 r=%222%22/></svg>') center/contain no-repeat; width: 180px; height: 20px;"></div>
-  
-  <div class="float eraser" style="background: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 20%22><rect fill=%22%23e74c3c%22 width=%2235%22 height=%2218%22 rx=%223%22/><rect fill=%22%23c0392b%22 x=%2230%22 width=%2210%22 height=%2218%22 rx=%223%22/></svg>') center/contain no-repeat; width: 120px; height: 20px;"></div>
-  
-  <div class="float clip" style="background: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 40%22><path fill=%22%2334495e%22 d=%22M5,0 L15,0 L15,35 L10,30 L5,35 Z%22/></svg>') center/contain no-repeat; width: 95px; height: 40px;"></div>
+  <img src="{{ url_for('static', filename='images/pencil-removebg-preview.png') }}" class="float pencil">
+  <img src="{{ url_for('static', filename='images/eraser-removebg-preview.png') }}" class="float eraser">
+  <img src="{{ url_for('static', filename='images/paperclip-removebg-preview.png') }}" class="float clip">
 
   <div class="journal">
     <h1>📔Emotion Aware Daily Journal</h1>
-    <p class="subtitle">How was your day…</p>
+    <p>How was your day…</p>
 
-    <form method="POST" onsubmit="handleSubmit(event)">
-      <textarea name="entry" id="journalEntry" placeholder="Dear Diary..." required></textarea>
+    <form method="POST">
+      <textarea name="entry" placeholder="Dear Diary..." required></textarea>
       <button type="submit">Analyze ✨</button>
     </form>
-    
-    <div class="result" id="analysisResult" style="display: none;">
+
+    {% if analysis %}
+    <div class="result">
         <h3>🔎 Analysis:</h3>
-        <p id="analysisText"></p>
+        <p>{{ analysis|safe }}</p>
     </div>
+    {% endif %}
   </div>
-
-  <script>
-    function handleSubmit(event) {
-      event.preventDefault();
-
-      const entry = document.getElementById('journalEntry').value;
-      const resultDiv = document.getElementById('analysisResult');
-      const analysisText = document.getElementById('analysisText');
-      
-      // // Simple mock analysis - replace with actual backend call
-      const mockAnalyses = [
-        "Your entry shows a mix of gratitude and reflection. There's a sense of contentment with some underlying anticipation for what's to come.",
-        "I detect feelings of accomplishment and satisfaction in your writing. You seem to be processing the day's events positively.",
-        "Your words convey a contemplative mood with hints of optimism. There's evidence of emotional growth and self-awareness.",
-        "The tone suggests resilience and adaptability. You're navigating challenges while maintaining a hopeful perspective."
-      ];
-      
-      const randomAnalysis = mockAnalyses[Math.floor(Math.random() * mockAnalyses.length)];
-      
-      analysisText.textContent = randomAnalysis;
-      resultDiv.style.display = 'block';
-      
-      // Scroll to results on mobile
-      if (window.innerWidth <= 768) {
-        setTimeout(() => {
-          resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 100);
-      }
-    }
-
-    // Add some interactivity to floating objects
-    document.querySelectorAll('.float').forEach(obj => {
-      obj.addEventListener('click', () => {
-        obj.style.animationDuration = '2s';
-        setTimeout(() => {
-          obj.style.animationDuration = '6s';
-        }, 4000);
-      });
-    });
-  </script>
 </body>
 </html>
