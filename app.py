@@ -7,7 +7,7 @@ from datetime import datetime
 import uuid
 
 # Configure Gemini API (⚠️ best practice: move API key into Railway "Variables" tab)
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY", "YOUR_API_KEY_HERE"))
+genai.configure(api_key=os.environ.get("GEMINI_API_KEY", "AIzaSyCAyJGft7lbkyLZ4GIlP9RX5QjHQz8dD-U"))
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "supersecret")  # random long string in Railway variables
