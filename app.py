@@ -15,10 +15,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///journal.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
-with app.app_context():
-    db.drop_all()   # delete all old tables
-    db.create_all() # recreate with session_id column
-
 # Database model
 class JournalEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
