@@ -280,6 +280,29 @@
     transition: all 0.2s ease;
   }
 
+    .delete-btn {
+    background: #e74c3c;
+    border: none;
+    color: white;
+    font-size: 14px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    margin-left: 10px;
+  }
+
+.delete-btn:hover {
+  background: #c0392b;
+  transform: scale(1.1);
+}
+
+.delete-btn:active {
+  background: #a93226;
+  transform: scale(0.95);
+}
+
+
     
     /* Floating animation */
     @keyframes float {
@@ -628,23 +651,34 @@
     {% endif %}
 
     {% if entries %}
-    <div class="entries">
-        <h3>📚 Your Past Entries</h3>
-        {% for e in entries %}
-          <div class="entry-item" onclick="toggleAnalysis({{ e.id }})">
-            <span class="entry-date">{{ e.timestamp.strftime('%B %d, %Y %I:%M %p') }}</span>
-            <div class="entry-header">
-              <div class="entry-text">{{ e.text }}</div>
-              <span class="arrow" id="arrow-{{ e.id }}">▼</span>
-            </div>
-            <div class="entry-analysis" id="analysis-{{ e.id }}">
-              {{ e.analysis | safe }}
-            </div>
+<div class="entries">
+    <h3>📚 Your Past Entries</h3>
+    {% for e in entries %}
+      <div class="entry-item">
+        <span class="entry-date">{{ e.timestamp.strftime('%B %d, %Y %I:%M %p') }}</span>
+        
+        <div class="entry-header">
+          <div class="entry-text" onclick="toggleAnalysis({{ e.id }})">
+            {{ e.text }}
           </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-  </div>
+          
+          <!-- Delete button -->
+          <form action="{{ url_for('delete_entry', entry_id=e.id) }}" method="get" 
+                onsubmit="return confirm('Delete this entry?')" style="margin:0;">
+            <button type="submit" class="delete-btn">🗑️</button>
+          </form>
+          
+          <span class="arrow" id="arrow-{{ e.id }}" onclick="toggleAnalysis({{ e.id }})">▼</span>
+        </div>
+
+        <div class="entry-analysis" id="analysis-{{ e.id }}">
+          {{ e.analysis | safe }}
+        </div>
+      </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 
   <script>
     function toggleAnalysis(id) {
