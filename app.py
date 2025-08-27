@@ -1,16 +1,18 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 import google.generativeai as genai
 import re
 import os
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import uuid
 
 # Configure Gemini API (⚠️ best practice: move API key into Railway "Variables" tab)
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY", "AIzaSyCAyJGft7lbkyLZ4GIlP9RX5QjHQz8dD-U"))
+genai.configure(api_key=os.environ.get("GEMINI_API_KEY", "YOUR_API_KEY_HERE"))
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "supersecret")  # random long string in Railway variables
 
-# Database setup (SQLite for simplicity)
+# Database setup (SQLite for local testing, Railway will replace with Postgres)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///journal.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
@@ -21,6 +23,7 @@ class JournalEntry(db.Model):
     text = db.Column(db.Text, nullable=False)
     analysis = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    session_id = db.Column(db.String(100), nullable=False)  # link entries to each user session
 
 # Function to analyze entry
 def analyze_journal_entry(entry: str):
@@ -51,6 +54,12 @@ def analyze_journal_entry(entry: str):
 
     return "<br>".join(numbered)
 
+# Assign a unique session ID if user doesn’t have one
+@app.before_request
+def assign_session():
+    if "session_id" not in session:
+        session["session_id"] = str(uuid.uuid4())
+
 # Routes
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -59,13 +68,17 @@ def home():
         entry = request.form["entry"]
         analysis = analyze_journal_entry(entry)
 
-        # Save to database
-        new_entry = JournalEntry(text=entry, analysis=analysis)
+        # Save only for this session
+        new_entry = JournalEntry(
+            text=entry,
+            analysis=analysis,
+            session_id=session["session_id"]
+        )
         db.session.add(new_entry)
         db.session.commit()
 
-    # Show all saved entries (latest first)
-    entries = JournalEntry.query.order_by(JournalEntry.timestamp.desc()).all()
+    # Load only current user's entries
+    entries = JournalEntry.query.filter_by(session_id=session["session_id"]).order_by(JournalEntry.timestamp.desc()).all()
     return render_template("index.html", analysis=analysis, entries=entries)
 
 # Create tables on first run
