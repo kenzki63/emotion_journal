@@ -12,11 +12,8 @@ genai.configure(api_key=os.environ.get("GEMINI_API_KEY", "AIzaSyCAyJGft7lbkyLZ4G
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "supersecret")  # random long string
 
-# Database setup (Railway Postgres or local SQLite fallback)
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
-    "DATABASE_URL", "sqlite:///journal.db"
-).replace("postgres://", "postgresql://")
-
+# Database setup
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///journal.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
