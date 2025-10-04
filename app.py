@@ -6,14 +6,10 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import uuid
 
-# ✅ Configure Gemini API
-genai.configure(api_key=os.environ["GEMINI_API_KEY"])
-
-# ✅ Create Flask app first
+genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "fallback-secret")
 
-# ✅ Then assign secret key
-app.secret_key = os.environ["SECRET_KEY"]
 
 # ✅ Database setup
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///journal.db"
