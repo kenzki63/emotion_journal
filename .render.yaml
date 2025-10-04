@@ -7,5 +7,5 @@ services:
     envVars:
       - key: GEMINI_API_KEY
         sync: false
-      - key: SECRET_KEY
+      - key: AIzaSyCAyJGft7lbkyLZ4GIlP9RX5QjHQz8dD-U
         sync: false
