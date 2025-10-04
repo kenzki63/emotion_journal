@@ -10,9 +10,7 @@ import uuid
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 app.secret_key = os.environ["SECRET_KEY"]
 
-
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "supersecret")  # random long string
 
 # Database setup
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///journal.db"
