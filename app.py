@@ -7,7 +7,8 @@ from datetime import datetime
 import uuid
 
 # Configure Gemini API
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY", "AIzaSyCAyJGft7lbkyLZ4GIlP9RX5QjHQz8dD-U"))
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+app.secret_key = os.environ["SECRET_KEY"]
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "supersecret")  # random long string
@@ -97,4 +98,5 @@ with app.app_context():
     db.create_all()
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
+
